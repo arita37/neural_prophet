@@ -7,7 +7,7 @@ import torch
 from neuralprophet import time_dataset
 from neuralprophet.utils import set_y_as_percent
 
-log = logging.getLogger("nprophet.plotting")
+log = logging.getLogger("NP.plotting")
 
 try:
     from matplotlib import pyplot as plt
@@ -107,9 +107,9 @@ def plot_parameters(m, forecast_in_focus=None, weekly_start=0, yearly_start=0, f
 
     # Add Covariates
     lagged_scalar_regressors = []
-    if m.covar_config is not None:
-        for name in m.covar_config.keys():
-            if m.covar_config[name].as_scalar:
+    if m.config_covar is not None:
+        for name in m.config_covar.keys():
+            if m.config_covar[name].as_scalar:
                 lagged_scalar_regressors.append((name, m.model.get_covar_weights(name).detach().numpy()))
             else:
                 components.append(

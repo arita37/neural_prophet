@@ -1,18 +1,16 @@
-import os
 from collections import OrderedDict
 from datetime import datetime
 import pandas as pd
 import numpy as np
 import torch
 from torch.utils.data.dataset import Dataset
-from attrdict import AttrDict
 from neuralprophet import hdays as hdays_part2
 import holidays as hdays_part1
 from collections import defaultdict
 from neuralprophet import utils
 import logging
 
-log = logging.getLogger("nprophet.time_dataset")
+log = logging.getLogger("NP.time_dataset")
 
 
 class TimeDataset(Dataset):
@@ -120,14 +118,14 @@ def tabularize_univariate_datetime(
     Args:
         df (pd.DataFrame): Sequence of observations
             with original 'ds', 'y' and normalized 't', 'y_scaled' columns.
-        season_config (AttrDict): configuration for seasonalities.
+        season_config (configure.Season): configuration for seasonalities.
         n_lags (int): number of lagged values of series to include as model inputs. Aka AR-order
         n_forecasts (int): number of steps to forecast into future.
         events_config (OrderedDict): user specified events, each with their
             upper, lower windows (int) and regularization
         country_holidays_config (OrderedDict): Configurations (holiday_names, upper, lower windows,
             regularization) for country specific holidays
-        covar_config (OrderedDict): configuration for covariates
+        covar_config (OrderedDict<configure.Covar>): configuration for covariates
         regressors_config (OrderedDict): configuration for regressors
         predict_mode (bool): False (default) includes target values.
             True does not include targets but includes entire dataset as input
@@ -293,7 +291,7 @@ def fourier_series(dates, period, series_order):
         Matrix with seasonality features.
     """
     # convert to days since epoch
-    t = np.array((dates - datetime(1970, 1, 1)).dt.total_seconds().astype(np.float)) / (3600 * 24.0)
+    t = np.array((dates - datetime(1970, 1, 1)).dt.total_seconds().astype(float)) / (3600 * 24.0)
     return fourier_series_t(t, period, series_order)
 
 
